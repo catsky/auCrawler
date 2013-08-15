@@ -70,6 +70,27 @@ class Crawler():
 if __name__ == "__main__":
     mycrawler = Crawler()
     mycrawler.add_seeds(['http://xkb.com.au/html/immi/yimingonglue/'])
-    rules = {'^(http://xkb\.com\.au)(.*)$': ['^(http:)//(xkb\.com\.au).*$']}
+    rules = {'^(http://xkb\.com\.au)(.*)$':
+             ['^(http:)//(xkb\.com\.au)/html/immi/yimingonglue/2013/\d+/\d+.*html$',
+              '^(http:)//(xkb\.com\.au)/html/immi/zhiyezhilu/2013/\d+/\d+.*html$',
+              '^(http:)//(xkb\.com\.au)/html/immi/renzaiaozhou/2013/\d+/\d+.*html$',
+              '^(http:)//(xkb\.com\.au)/html/immi/shenghuozixun/2013/\d+/\d+.*html$',
+              ]}
+#     http://xkb.com.au/html/immi/yimingonglue/2013/0811/109468.html
+#     http://xkb.com.au/html/immi/zhiyezhilu/2013/0701/106708.html
+#     http://xkb.com.au/html/immi/renzaiaozhou/2013/0814/109694.html
+#     http://xkb.com.au/html/immi/shenghuozixun/2013/0725/108398.html
+#     http://xkb.com.au/html/news/shehui/2013/0815/109762.html
+#     http://xkb.com.au/html/news/aozhoushizheng/2013/0815/109798.html
+#     http://xkb.com.au/html/news/aozhoucaijing/2013/0815/109789.html
+#     http://xkb.com.au/html/study/news/2013/0815/109775.html
+#     http://xkb.com.au/html/study/focus/2013/0730/108719.html
+#     http://xkb.com.au/html/study/life/2013/0731/108778.html
+#     http://xkb.com.au/html/study/job/2013/0717/107852.html
+#     http://xkb.com.au/html/life/wanleaozhou/2013/0812/109520.html
+#     http://xkb.com.au/html/life/meiweiaozhou/2013/0815/109790.html
+#     http://xkb.com.au/html/life/pinweiaozhou/2013/0814/109713.html
+#     http://xkb.com.au/html/life/wodelehuo/2013/0807/109199.html
+
     mycrawler.add_rules(rules)
     mycrawler.start()

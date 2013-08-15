@@ -63,9 +63,42 @@ class Webpage(Base):
     url = Column(String(200))
     html = Column(Text)
 
-    def __init__(self, url, html):
+    category = Column(String(17))
+    title = Column(String(100))
+    content = Column(Text)
+    comment_num = Column(Integer)
+    closecomment = Column(Integer)
+    tags = Column(String(100))
+    password = Column(String(8))
+    add_time = Column(Integer)
+    edit_time = Column(Integer)
+    shorten_content = Column(String(200))
+    imgthumbnail = Column(String(200))
+    post_type = Column(Integer)  # 1 for shown on top
+    click_num = Column(Integer)  # 1 for shown on top
+    editor_title = Column(String(100))
+
+    def __init__(self, url=None, html=None, category=None, title=None,
+                 content=None, comment_num=0, closecomment=0, tags=None,
+                 password=None, shorten_content=None, imgthumbnail=None,
+                 post_type=0, add_time=0, edit_time=0, click_num=0,
+                 editor_title=None):
         self.url = url
         self.html = html
+        self.category = category
+        self.title = title
+        self.content = content
+        self.comment_num = comment_num
+        self.closecomment = closecomment
+        self.tags = tags
+        self.password = password
+        self.add_time = add_time
+        self.edit_time = edit_time
+        self.shorten_content = shorten_content
+        self.imgthumbnail = imgthumbnail
+        self.post_type = post_type
+        self.click_num = click_num
+        self.editor_title = editor_title
 
     def __repr__(self):
         return "<Webpage('%s','%s')>" % (self.url, self.html)
