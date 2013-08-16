@@ -4,4 +4,5 @@ encoding/crawler.py=utf-8
 encoding/database.py=utf-8
 encoding/downloader.py=utf-8
 encoding/setting.py=utf-8
+encoding/test.py=utf-8
 encoding/webpage.py=utf-8

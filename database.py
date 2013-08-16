@@ -78,8 +78,8 @@ class Webpage(Base):
     click_num = Column(Integer)  # 1 for shown on top
     editor_title = Column(String(100))
 
-    def __init__(self, url=None, html=None, category=None, title=None,
-                 content=None, comment_num=0, closecomment=0, tags=None,
+    def __init__(self, url=None, html=None, title=None, content=None,
+                 category=None, comment_num=0, closecomment=0, tags=None,
                  password=None, shorten_content=None, imgthumbnail=None,
                  post_type=0, add_time=0, edit_time=0, click_num=0,
                  editor_title=None):
@@ -138,8 +138,8 @@ class OperatorDB:
             print "in pop_url: row is delted and commit"
         return url
 
-    def html2db(self, url, html):
-        webpage = Webpage(url, html)
+    def html2db(self, url, html, title=None, content=None):
+        webpage = Webpage(url, html, title, content)
         self.session.add(webpage)
         self.session.commit()
 

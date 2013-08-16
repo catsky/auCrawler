@@ -49,16 +49,19 @@ class Crawler():
                 error_msg, url, redirected_url, html = self.downloader.download(url)
                 #print error_msg, url, redirected_url, html
                 if html != None:
-                    self.dbop.html2db(url, html)
-    
                     self.webpage = WebPage(url, html)
+                    article = self.webpage.extract()
+                    if len(article) > 5:
+                        self.dbop.html2db(url, html, article[0], article[5])
+                    else:
+                        self.dbop.html2db(url, html)
                     print self.webpage.parse_links()
                     ruptn = self.get_patterns_from_rules(url)
                     links = self.webpage.filter_links(tags = ['a'], str_patterns = ruptn)
                     self.add_seeds(links)
                 self.mysleep(3)
             except Exception, err:
-                print "!!error!! Exception happend! %s" % url
+                print "!!error!! Exception happend! %s %s" % (url, err)
                 self.dbop.close()
 
     def mysleep(self, n):

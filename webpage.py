@@ -2,9 +2,12 @@
 import lxml.html    # python-lxml
 import urlparse
 import re
+from lxml import etree
+from StringIO import StringIO
+from lxml.cssselect import CSSSelector
+
 
 class WebPage:
-    
     ###########################################
     #   WEBPAGE CONSTRUCTOR
     ###########################################
@@ -13,6 +16,33 @@ class WebPage:
         self.html = html
         self.doc = lxml.html.fromstring(self.html)
         self.links = {}
+
+    ###########################################
+    #   extract the title/content/publishdate etc
+    #   from the HTML
+    ###########################################
+    def extract(self):
+        parser = etree.HTMLParser()
+        tree = etree.parse(StringIO(self.html), parser)
+        result = etree.tostring(tree.getroot(), pretty_print=True, method="html")
+        #headline
+        article = []
+        sel = CSSSelector('div#top')
+        for e in sel(tree.getroot()):
+            for c in e.getchildren():
+                for i in c.getchildren():
+                    print i.text
+                    article.append(i.text.strip())
+        #content
+        sel = CSSSelector('div#mid')
+        content = ""
+        for e in sel(tree.getroot()):
+            for c in e.getchildren():
+                if c.text is not None:
+                    print c.text
+                    content += c.text.strip() + "\n"
+        article.append(content)
+        return article
 
     #######################################
     # parsing links from html page
@@ -65,7 +95,7 @@ class WebPage:
 
 
 
-    # form 
+    # form
     def get_form(self, index):
         form = self.doc.forms[index]
         form.action = urlparse.urljoin(self.url, form.action)
