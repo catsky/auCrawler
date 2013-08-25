@@ -9,6 +9,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, Text
 import setting
+import time
+import re
 
 
 Base = declarative_base()
@@ -72,17 +74,18 @@ class Webpage(Base):
     password = Column(String(8))
     add_time = Column(Integer)
     edit_time = Column(Integer)
-    shorten_content = Column(String(200))
+    shorten_content = Column(Text)
     imgthumbnail = Column(String(200))
     post_type = Column(Integer)  # 1 for shown on top
     click_num = Column(Integer)  # 1 for shown on top
     editor_title = Column(String(100))
+    source = Column(String(100))
 
     def __init__(self, url=None, html=None, title=None, content=None,
                  category=None, comment_num=0, closecomment=0, tags=None,
                  password=None, shorten_content=None, imgthumbnail=None,
                  post_type=0, add_time=0, edit_time=0, click_num=0,
-                 editor_title=None):
+                 editor_title=None, source=None):
         self.url = url
         self.html = html
         self.category = category
@@ -99,6 +102,7 @@ class Webpage(Base):
         self.post_type = post_type
         self.click_num = click_num
         self.editor_title = editor_title
+        self.source = source
 
     def __repr__(self):
         return "<Webpage('%s','%s')>" % (self.url, self.html)
@@ -138,13 +142,34 @@ class OperatorDB:
             print "in pop_url: row is delted and commit"
         return url
 
-    def html2db(self, url, html, title=None, content=None):
-        webpage = Webpage(url, html, title, content)
+    def html2db(self, url, html, title=None, addtime=None, source=None, content=None):
+        if addtime is not None:
+            t = time.strptime(addtime, '%Y-%m-%d %M:%S')
+            addtime = time.mktime(t)
+
+        if content is not None:
+            shorten_content = self._shorten_content(content)
+        else:
+            shorten_content = None
+        webpage = Webpage(url=url, html=html, title=title,
+                          add_time=addtime, source=source,
+                          content=content,
+                          #shorten_content=self._shorten_content(content))
+                          shorten_content=shorten_content)
         self.session.add(webpage)
         self.session.commit()
 
     def close(self):
         self.session.close()
+
+    def _shorten_content(self, htmlstr='',sublength=80):
+        return htmlstr[0:sublength]
+#         print ">>>>: %s" % htmlstr
+#         result = re.sub(r'<[^>]+>', '', unicode(htmlstr))
+#         print ">>>>: %s" % result
+#         result = result.replace("&nbsp;","")
+#         print ">>>>: %s" % result
+#         return result[0:5]
 
 if __name__ == '__main__':
     dbop = OperatorDB()

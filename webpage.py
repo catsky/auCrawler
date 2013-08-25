@@ -22,6 +22,15 @@ class WebPage:
     #   from the HTML
     ###########################################
     def extract(self):
+        '''
+        0. 澳洲2013/14总移民配额不变 技术移民减700
+        1. 2013-06-26
+        2. 18:02
+        3. 来源：澳洲新快网
+        4. 编辑：轩渺 
+        5. 据澳洲论坛网报道，澳洲2013/14年度永久性移民配额将与上一个财年持平，为19万个。其中，在技术移民与家庭移民之间将微调700个配额。
+                            在2013/1
+        '''
         parser = etree.HTMLParser()
         tree = etree.parse(StringIO(self.html), parser)
         result = etree.tostring(tree.getroot(), pretty_print=True, method="html")
@@ -31,7 +40,7 @@ class WebPage:
         for e in sel(tree.getroot()):
             for c in e.getchildren():
                 for i in c.getchildren():
-                    print i.text
+                    #print i.text
                     article.append(i.text.strip())
         #content
         sel = CSSSelector('div#mid')
@@ -39,7 +48,7 @@ class WebPage:
         for e in sel(tree.getroot()):
             for c in e.getchildren():
                 if c.text is not None:
-                    print c.text
+                    #print c.text
                     content += c.text.strip() + "\n"
         article.append(content)
         return article
@@ -50,7 +59,7 @@ class WebPage:
     def parse_links(self):
         for elem, attr, link, pos in self.doc.iterlinks():
             absolute = urlparse.urljoin(self.url, link.strip())
-            print ">>absolute:%s" %absolute
+            #print ">>absolute:%s" %absolute
             #print elem.tag ,attr, absolute, pos
             if elem.tag in self.links:
                 self.links[elem.tag].append(absolute)
@@ -113,7 +122,7 @@ if __name__ == "__main__":
 
     url = "http://xkb.com.au/html/immi/yimingonglue/"
     error_msg, url, redirected_url, html = downloader.download(url)
-    print error_msg, url, redirected_url, len(html)
+    #print error_msg, url, redirected_url, len(html)
     time.sleep(2)
 
     page = WebPage(url, html)
