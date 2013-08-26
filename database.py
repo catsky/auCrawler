@@ -22,10 +22,17 @@ class ServerDB():
         ServerDB.session = None
 
         if ServerDB.engine is None:
-            ServerDB.engine = create_engine('mysql+mysqldb://%s:%s@%s:%s/%s?charset=utf8'
-                                            %(setting.DBUSER, setting.DBPASSWORD,
-                                              setting.HOSTNAME, setting.DBPORT,
-                                              setting.DBNAME))
+            if setting.DBCHOICE == 'mysql':
+                ServerDB.engine = create_engine('mysql+mysqldb://%s:%s@%s:%s/%s?charset=utf8'
+                                            %(setting.DBUSER_MYSQL, setting.DBPASSWORD_MYSQL,
+                                              setting.HOSTNAME, setting.DBPORT_MYSQL,
+                                              setting.DBNAME_MYSQL))
+            elif setting.DBCHOICE == 'postgresql':
+                ServerDB.engine = create_engine("postgresql://%s:%s@%s:%s/%s"
+                                            %(setting.DBUSER_POSTGRES, setting.DBPASSWORD_POSTGRES,
+                                              setting.HOSTNAME, setting.DBPORT_POSTGRES,
+                                              setting.DBNAME_POSTGRES))
+
         Session = sessionmaker(bind=ServerDB.engine)
         if ServerDB.session is None:
             ServerDB.session = Session()
